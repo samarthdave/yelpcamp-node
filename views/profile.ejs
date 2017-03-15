@@ -1,0 +1,28 @@
+<% include ./partials/header %>
+
+	<div class="container">
+		<div class="jumbotron">
+			<h1>Welcome <%= user.username %>!</h1>
+		</div>
+	</div>
+	<div class="container">
+		<h1 class="text-center">Listing your campgrounds</h1><br>
+		<% if (user.Campgrounds.length == 0) { %>
+			<h3>Looks pretty lonely here...</h3><br>
+			<a href="/campgrounds/new" class="btn btn-success">Create a new campground</a>
+		<% } %>
+		<div class="row text-center" id="campgrounds-listing">
+			<% for(var i = 0; i < user.Campgrounds.length; i++) { %>
+				<div class="col-md-3 col-sm-6">
+					<div class="thumbnail">
+						<img src="<%= user.Campgrounds[i].imageurl %>" alt="<%= user.Campgrounds[i].name %>">
+						<div class="caption">
+							<h4><a href="/campgrounds/<%= user.Campgrounds[i].id %>"><%= user.Campgrounds[i].name %></a></h4>
+						</div>
+					</div>
+				</div>
+			<% } %>
+		</div>
+	</div>
+
+<% include ./partials/footer %>

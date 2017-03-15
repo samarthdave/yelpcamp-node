@@ -1,0 +1,140 @@
+<% include ../partials/header %>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-3">
+				<p class="lead">More info</p>
+				<div class="list-group">
+					<li class="list-group-item active">Category 1</li>
+					<li class="list-group-item">Category 2</li>
+					<li class="list-group-item">Category 3</li>
+				</div>
+			</div>
+			<div class="col-md-9">
+				<div class="thumbnail">
+					<img src="<%= campground.imageurl %>" alt="<%= campground.name %>" class="img-responsive">
+					<div class="caption-full">
+						<h4><%= campground.name %> <small><i><%= campground.User.username %></i></small></h4>
+						<h4 class="pull-right">
+						<% if(user && campground.User.id == user.id) { %>
+						<small><a href="/campgrounds/<%= campground.id %>/edit" class=" text-primary">edit</a></small>
+						<small><a class="text-danger" href="" data-toggle="modal" data-target="#delete-modal">delete</a></small>
+						<% } %> $9.00</h4>
+						<p><%= campground.body %></p>
+					</div>
+				</div>
+				<div class="well">
+					<div class="text-right">
+						<% if(user) { %>
+							<a class="btn btn-success" href="" data-toggle="modal" data-target="#new-comment-modal">Add new comment</a>
+						<% } else { %>
+							<small class="text-muted"><i>You must be logged in to comment</i></small>
+						<% } %>
+					</div><hr>
+					<% if(comments.length == 0) { %>
+						<i class="text-muted"><small>Nothing to see here.</small></i>
+					<% } %>
+					<% for(var i = 0; i < comments.length; i++) { %>
+						<div class="row">
+							<div class="col-md-12">
+								<strong><%= comments[i].User.username %></strong>
+								<small><span class="pull-right text-muted">
+								<% if(comments[i].createdAt.toString() == comments[i].updatedAt.toString()) { %>
+									created <%= comments[i].updatedAt.toLocaleString() %>
+								<% } else { %>
+									edited <%= comments[i].createdAt.toLocaleString() %>
+								<% } %>
+								</span>
+								</small>
+								<p class="comment-body"><%= comments[i].body %>
+								<% if(user && comments[i].User.id == user.id) { %><span class="pull-right"><button data-toggle="modal" data-target="#edit-comment-modal" class="btn btn-primary btn-xs" data-campground="<%= campground.id %>" data-comment="<%= comments[i].id %>" data-body="<%= comments[i].body %>">edit</button> <button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-comment-modal" data-campground="<%= campground.id %>" data-comment="<%= comments[i].id %>">delete</button></span><% } %></p>
+							</div>
+						</div>
+					<% } %>
+				</div>
+			</div>
+		</div>
+	</div><br><br><br><br><br>
+
+	<!-- DELETE CAMP MODAL -->
+	<div class="modal fade" id="delete-modal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button class="close" data-dismiss="modal" aria-label="close">&times;</button>
+					<h4>Are you sure? There's no going back!</h4>
+				</div>
+				<div class="modal-body">
+					<h5>You are about to delete "<%= campground.name %>"</h5>
+				</div>
+				<div class="modal-footer">
+					<form class="delete-form" action="/campgrounds/<%= campground.id %>?_method=DELETE" method="POST">
+						<button type="submit" class="pull-left btn btn-danger">Yes, I am sure</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- NEW COMMENT MODAL -->
+	<div class="modal fade" id="new-comment-modal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button class="close" data-dismiss="modal" aria-label="close">&times;</button>
+					<h4>Create a comment for "<%= campground.name %>"</h4>
+				</div>
+				<div class="modal-body">
+					<form action="/campgrounds/<%= campground.id %>/comments" method="POST">
+						<div class="form-group">
+							<input type="text" class="form-control" name="body" placeholder="Comment" maxlength="100">
+						</div>
+						<div class="form-group">
+							<button class="btn btn-success" type="submit">Send</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- EDIT COMMENT MODAL -->
+	<div class="modal fade" id="edit-comment-modal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button class="close" data-dismiss="modal" aria-label="close">&times;</button>
+					<h4>Edit your comment</h4>
+				</div>
+				<div class="modal-body">
+					<form action="" id="edit-comment-form" method="POST">
+						<div class="form-group">
+							<input type="text" class="form-control" name="body" placeholder="Comment" maxlength="100">
+						</div>
+						<div class="form-group">
+							<button class="btn btn-success" type="submit">Edit</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- DELETE COMMENT MODAL -->
+	<div class="modal fade" id="delete-comment-modal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button class="close" data-dismiss="modal" aria-label="close">&times;</button>
+					<h4>Are you sure? There's no going back!</h4>
+				</div>
+				<div class="modal-body">
+					<form action="" id="delete-comment-form" method="POST">
+						<div class="form-group">
+							<button class="btn btn-danger" type="submit">I'm sure</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<% include ../partials/footer %>

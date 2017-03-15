@@ -1,0 +1,28 @@
+<nav class="navbar navbar-default">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-1" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="/"><span class="glyphicon glyphicon-fire"></span> Yelpcamp</a>
+		</div>
+		<div class="collapse navbar-collapse" id="navbar-1">
+			<ul class="nav navbar-nav navbar-right">
+				<% if(user) { %>
+					<li><a href="/profile">signed in as <i><%= user.username %></i></a></li>
+					<a href="/profile" class="btn btn-info navbar-btn">Profile</a>
+					<a href="/logout" class="btn btn-danger navbar-btn">Logout</a>
+				<% } else { %>
+					<form action="/login" method="POST" class="navbar-form navbar-right">
+						<input type="text" class="form-control" name="username" placeholder="Username">
+						<input type="text" class="form-control" name="password" placeholder="Password">
+						<input type="submit" style="display: none">
+					</form>
+				<% } %>
+			</ul>
+		</div>
+	</div>
+</nav>

@@ -1,5 +1,5 @@
-# yelpcamp built on node
-a simple CRUD app built with ExpressJS
+# Yelpcamp
+a simple CRUD app built with Express
 
 This app uses:
 

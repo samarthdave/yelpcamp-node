@@ -24,3 +24,6 @@ This app uses:
 
 * I haven't added persistent sessions (eg. if the server is turned off, the sessions are lost)
   The easy fix is to add 'connect-session-sequelize' module
+
+
+![alt tag](https://raw.githubusercontent.com/samarthdave/yelpcamp-node/master/public/campground1.PNG)

@@ -1,21 +1,21 @@
-var models = require("../models"),
+const models = require("../models"),
 	User = models.User,
 	Campground = models.Campground,
 	LocalStrategy = require("passport-local").Strategy;
 
-module.exports = function(passport) {
+module.exports = (passport) => {
 	// (de)serializing user
-	passport.serializeUser(function(user, done) {
+	passport.serializeUser((user, done) => {
 		done(null, user.id);
 	});
 
-	passport.deserializeUser(function(id, done) {
+	passport.deserializeUser((id, done) => {
 		User.find({
 			where: { id: id },
 			include: [{ all: true }] // wouldn't recommend this line, but its fine for now
-		}).then(function(user) {
+		}).then((user) => {
 			done(null, user);
-		}).catch(function(e){
+		}).catch((e) => {
 			done(e, false);
 		});
 	});
@@ -25,13 +25,13 @@ module.exports = function(passport) {
 	passport.use('local-signup', new LocalStrategy({
 		// usernameField: 'email', (optional if email login)
 		passReqToCallback: true
-	}, function(req, username, password, done) {
+	}, (req, username, password, done) => {
 		// find if a user with the username already exists
 		User.findOne({
 			where: {
 				username: username
 			}
-		}).then(function(user) {
+		}).then((user) => {
 			if(user) {
 				return done(null, false, req.flash('error', 'That username is already taken.'));
 			} else {
@@ -40,13 +40,12 @@ module.exports = function(passport) {
 					username: username,
 					// hash function from the models
 					password: User.generateHash(password)
-				}).then(function(user) {
-					return done(null, user);
-				}).catch(function(e) {
+				}).then((user) => done(null, user))
+				.catch((e) => {
 					throw e;
 				});
 			}
-		}).catch(function(e) {
+		}).catch((e) => {
 			return done(e);
 		});
 	}));
@@ -55,12 +54,12 @@ module.exports = function(passport) {
 
 	passport.use("local-login", new LocalStrategy({
 		passReqToCallback: true
-	}, function(req, username, password, done) {
+	}, (req, username, password, done) => {
 		User.findOne({
 			where: { username: username },
 			include: [{ all: true }],
 			order: [[ Campground, 'createdAt', 'DESC']]
-		}).then(function(user) {
+		}).then((user) => {
 			// errors if invalid password, etc.
 			// invalid username
 			if(!user)
@@ -71,6 +70,7 @@ module.exports = function(passport) {
 			// authenticated the user (and it only took 75 lines)
 			req.flash("success", "Logged you in!");
 			return done(null, user);
-		});
+		})
+		.catch((e) => done(e));
 	}));
 }

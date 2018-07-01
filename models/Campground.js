@@ -1,7 +1,7 @@
 "use strict";
 
-module.exports = function(sequelize, DataTypes) {
-	var Campground = sequelize.define("Campground", {
+module.exports = (sequelize, DataTypes) => {
+	const Campground = sequelize.define("Campground", {
 		id: {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
@@ -34,7 +34,7 @@ module.exports = function(sequelize, DataTypes) {
 		// 	}
 		// },
 		classMethods: {
-			associate: function(models) {
+			associate: (models) => {
 				Campground.belongsTo(models.User, {
 					onDelete: "CASCADE",
 					foreignKey: {

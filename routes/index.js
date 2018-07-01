@@ -1,11 +1,11 @@
-var express = require("express"),
+const express = require("express"),
 	router = express.Router({mergeParams: true}),
 	models = require("../models");
 
-router.get("/", function(req, res) {
+router.get("/", (req, res) => {
 	models.Campground.findAll({
 		order: "createdAt DESC"
-	}).then(function(campgrounds) {
+	}).then((campgrounds) => {
 		res.render("index", {campgrounds: campgrounds});
 	});
 });

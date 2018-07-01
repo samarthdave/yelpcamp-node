@@ -1,7 +1,7 @@
 "use strict";
 
-module.exports = function(sequelize, DataTypes) {
-	var Comment = sequelize.define("Comment", {
+module.exports = (sequelize, DataTypes) => {
+	const Comment = sequelize.define("Comment", {
 		id: {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
@@ -11,7 +11,7 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.STRING,
 			allowNull: false,
 			validate: {
-				rightLength: function(value) {
+				rightLength: (value) => {
 					if(value.length < 1) {
 						throw new Error("Your comment is too short.");
 					} else if(value.length > 100) {
@@ -27,7 +27,7 @@ module.exports = function(sequelize, DataTypes) {
 		// 	}
 		// },
 		classMethods: {
-			associate: function(models) {
+			associate: (models) => {
 				Comment.belongsTo(models.User, {
 					onDelete: "CASCADE",
 					foreignKey: {

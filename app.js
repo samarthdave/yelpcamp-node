@@ -30,7 +30,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
 	res.locals = {
 		error: req.flash("error"),
 		success: req.flash("success"),
@@ -47,8 +47,8 @@ app.use(IndexRoutes);
 app.use("/campgrounds", CampgroundRoutes);
 app.use("/campgrounds/:id/comments", CommentRoutes);
 
-models.sequelize.sync().then(function() {
-	app.listen(3000, function() {
+models.sequelize.sync().then(() => {
+	app.listen(3000, () => {
 		console.log("The magic happens on port 3000!");
 	});
 });

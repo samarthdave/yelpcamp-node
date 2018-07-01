@@ -1,19 +1,19 @@
-var models = require("../models"),
+const models = require("../models"),
 	Campground = models.Campground,
 	User = models.User,
 	Comment = models.Comment;
 
-exports.isLoggedIn = function(req, res, next) {
+exports.isLoggedIn = (req, res, next) => {
 	if(req.isAuthenticated()) {
 		return next();
 	}
 	res.redirect("/login");
 }
 
-exports.checkCampgroundOwnership = function(req, res, next) {
-	var campgroundId = req.params.id;
+exports.checkCampgroundOwnership = (req, res, next) => {
+	const campgroundId = req.params.id;
 	Campground.findById(campgroundId)
-	.then(function(campground) {
+	.then((campground) => {
 		if(campground) {
 			if(campground.UserId == req.user.id) {
 				return next();
@@ -27,10 +27,10 @@ exports.checkCampgroundOwnership = function(req, res, next) {
 	});
 }
 
-exports.isValidCampground = function(req, res, next) {
-	var campground_id = req.params.id;
+exports.isValidCampground = (req, res, next) => {
+	const campground_id = req.params.id;
 	Campground.findById(campground_id)
-	.then(function(campground) {
+	.then((campground) => {
 		if(campground) {
 			return next();
 		} else {
@@ -40,14 +40,14 @@ exports.isValidCampground = function(req, res, next) {
 	});
 }
 
-exports.checkCommentOwnership = function(req, res, next) {
+exports.checkCommentOwnership = (req, res, next) => {
 	//first part checks for comment exists
-	var userid = req.user.id, commentId = req.params.commentid;
-	var foundComment = false;
+	let userid = req.user.id, commentId = req.params.commentid;
+	let foundComment = false;
 	Comment.findById(commentId)
-	.then(function(comment) {
+	.then((comment) => {
 		if(comment) { foundComment = true; }
-	}).catch(function(err) {}).then(function() {
+	}).catch((err) => {}).then(() => {
 		if(!foundComment) {
 			req.flash("error", "Couldn't find your comment!");
 			res.redirect("back");
@@ -58,10 +58,10 @@ exports.checkCommentOwnership = function(req, res, next) {
 			where: { id: userid },
 			include: [{ all: true, nested: true }]
 		})
-		.then(function(user) {
+		.then((user) => {
 			if(user) {
-				var comments = user.Comments;
-				for(var i = 0; i < comments.length; i++) {
+				let comments = user.Comments;
+				for(let i = 0; i < comments.length; i++) {
 					if(comments[i].id == commentId) { return next(); }
 				}
 				req.flash("error", ":/ You're not allowed to change other people's comments.");

@@ -16,7 +16,7 @@ This app uses:
 * Run the following commands
 
       npm install
-      node app.js
+      npm start
 
 * Navigate to localhost:3000
 
